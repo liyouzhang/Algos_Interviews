@@ -44,3 +44,30 @@ HAVING Direct_reports >= 5)
 SELECT em.Name
 FROM Employee em, Managers ma
 WHERE em.Id = ma.ManagerId
+
+
+OTHER SOLUTIONS:
+> beats 44%
+select a.name from
+employee a join
+employee b
+on a.id = b.managerid
+group by a.name
+having count(*) >=5
+
+> fast solutions
+SELECT Name
+FROM EMPLOYEE
+WHERE Id in (
+SELECT ManagerID
+FROM EMPLOYEE
+WHERE ManagerID IS NOT NULL
+GROUP BY ManagerId
+HAVING COUNT(ManagerID) >= 5
+);
+
+
+
+
+
+
