@@ -50,4 +50,15 @@ Employ '3' has two salary records except its most recent pay month '4': month '3
 
 > Liyou:
 
-1. partition by Id and sum over 
+1. windows function - SUM(), partition by Id and order by month rolling sum
+2. exclude the last month for each Id
+3. limit the history to last 4 months for each id
+4. end: order by id ascending, by 'month" descending
+
+SELECT Id, Month, Salary
+FROM
+(SELECT Id, Month, SUM(Salary)OVER(PARTITION BY Id ORDER BY Month) AS Salary, MAX(Month)OVER(PARTITION BY Id) AS current_month
+FROM Employee) Master
+WHERE Month IN (current_month-1, current_month-2, current_month-3)
+ORDER BY 1, 2 DESC
+;
