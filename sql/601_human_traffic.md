@@ -70,4 +70,14 @@ order by t1.id
 
 
 
-
+> Liyou final:
+SELECT DISTINCT s1.id, s1.date, s1.people
+FROM stadium s1, stadium s2, stadium s3
+WHERE s1.people >= 100 and s2.people >=100 and s3.people >=100 AND 
+((s1.id - s2.id = 1 and s2.id - s3.id = 1) OR
+(s1.id - s2.id = 1 and s3.id - s1.id = 1) OR
+(s2.id - s1.id =1 and s3.id - s2.id = 1) OR 
+(s3.id - s1.id = 1 and s2.id - s3.id = 1) OR
+(s2.id - s1.id =1 and s1.id - s3.id = 1) OR
+(s1.id - s3.id =1 and s3.id - s2.id =1))
+ORDER BY s1.id;
