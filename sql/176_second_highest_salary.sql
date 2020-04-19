@@ -60,9 +60,13 @@ limit 1
 -- need to clarify in interviews 
 -- also I put the DESC in the wrong place
 
-select 
-    salary as SecondHighestSalary
-from Employee e 
-order by Salary DESC 
---  MYSQL syntax 
-limit 2 offset 1 
+-- to overcome the null issue when there is only 1 row, put it as a subquery
+-- or, ifnull()
+SELECT
+    (SELECT DISTINCT
+            Salary
+        FROM
+            Employee
+        ORDER BY Salary DESC
+        LIMIT 1 OFFSET 1) AS SecondHighestSalary
+;
