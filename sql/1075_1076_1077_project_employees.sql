@@ -133,4 +133,46 @@ where ranks = 1
 -- optimizaiton: I can put "count (distinct employee_id) as num_employees" directly in the ranks CTE
 -- , rnak()over(order by (count (distinct employee_id)) DESC) as ranks 
 
+'''
+Write an SQL query that reports the most experienced employees in each project. In case of a tie, report all employees with the maximum number of experience years.
+Result table:
++-------------+---------------+
+| project_id  | employee_id   |
++-------------+---------------+
+| 1           | 1             |
+| 1           | 3             |
+| 2           | 1             |
++-------------+---------------+
+Both employees with id 1 and 3 have the most experience among the employees of the first project. For the second project, the employee with id 1 has the most experience.
+'''
+
+-- I will need to join table so each project employee has years info
+-- then I will have to use windows function to rank years of experience partition by each project 
+-- lastly, I will limit to ranks = 1 
+with t1 as (
+    select 
+        project_id
+        , employee_id
+        , experience_years
+    from project p 
+    join employee e 
+        on p.employee_id  = e.employee_id 
+),
+
+t2 as (
+    select 
+        project_id
+        , employee_id 
+        , ranks()over (partition by project_id order by experience_years DESC) as ranks 
+    from t1
+)
+
+select 
+    project_id
+    , employee_id
+from t2 
+where 1=1
+     and ranks = 1 
+group by 1,2 
+order by 1 
 
